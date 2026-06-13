@@ -7,8 +7,19 @@ import UserPanel from "./UserPanel";
 function App() {
     const [loggedIn, setLoggedIn] = useState('');
 
-    function login(email) {
-        if (email) {
+    async function login(email) {
+        const response = await fetch('/api/participants', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                login: email,
+                password: ''
+            })
+        });
+
+        if (response.ok || response.status === 409) {
             setLoggedIn(email);
         }
     }

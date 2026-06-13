@@ -1,5 +1,5 @@
 import "./MeetingsList.css"
-export default function MeetingsList({meetings, onDelete}) {
+export default function MeetingsList({meetings, onDelete, saveToMeeting, leaveFromMeeting, username}) {
     return (
         <table>
             <thead>
@@ -7,6 +7,7 @@ export default function MeetingsList({meetings, onDelete}) {
                 <th>Nazwa spotkania</th>
                 <th>Opis</th>
                 <th>Akcja</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -15,6 +16,16 @@ export default function MeetingsList({meetings, onDelete}) {
                     <td>{meeting.title}</td>
                     <td>{meeting.description}</td>
                     <td>
+                        <button type={"button"}
+                                onClick={() => saveToMeeting(meeting)}>
+                            Zapisz się
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => leaveFromMeeting(meeting)}>
+                            Wypisz się
+                        </button>
+
                         <button type={"button"}
                                 className="button button-outline button-red"
                                 onClick={() => onDelete(meeting)}>

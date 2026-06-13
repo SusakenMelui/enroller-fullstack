@@ -61,12 +61,13 @@ public class ParticipantRestController {
     }
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> update(@PathVariable("id") String login, @RequestBody Participant updatedParticipant) {
+	public ResponseEntity<?> update(@PathVariable("id") String login,
+									@RequestBody Participant updatedParticipant) {
 		Participant participant = participantService.findByLogin(login);
 		if (participant == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
-		participantService.update(participant);
+		participantService.update(updatedParticipant);
 		return new ResponseEntity<Participant>(HttpStatus.OK);
 	}
 
