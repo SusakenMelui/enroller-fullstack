@@ -7,7 +7,6 @@ export default function MeetingsList({meetings, onDelete, saveToMeeting, leaveFr
 
     const [expanded, setExpanded] = useState({});
 
-    // np. { 1: true, 3: false }
 
     function toggle(meetingId) {
         setExpanded(prev => ({
