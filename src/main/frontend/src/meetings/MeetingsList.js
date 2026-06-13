@@ -12,28 +12,48 @@ export default function MeetingsList({meetings, onDelete, saveToMeeting, leaveFr
             </thead>
             <tbody>
             {
-                meetings.map((meeting, index) => <tr key={index}>
-                    <td>{meeting.title}</td>
-                    <td>{meeting.description}</td>
-                    <td>
-                        <button type={"button"}
-                                onClick={() => saveToMeeting(meeting)}>
-                            Zapisz się
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => leaveFromMeeting(meeting)}>
-                            Wypisz się
-                        </button>
+                meetings.map((meeting, index) => {
 
-                        <button type={"button"}
-                                className="button button-outline button-red"
-                                onClick={() => onDelete(meeting)}>
-                            Usuń
-                        </button>
 
-                    </td>
-                </tr>)
+
+                    const enrolled = meeting.participants?.some(p => {
+
+                        return p.login === username;
+                    });
+
+                    return (
+                        <tr key={index}>
+                            <td>{meeting.title}</td>
+                            <td>{meeting.description}</td>
+                            <td>
+
+                                {!enrolled ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => saveToMeeting(meeting)}>
+                                        Zapisz się
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={() => leaveFromMeeting(meeting)}
+                                        className="button button-outline"
+                                    >
+                                        Wypisz się
+                                    </button>
+                                )}
+
+                                <button
+                                    type="button"
+                                    className="button button-outline button-red"
+                                    onClick={() => onDelete(meeting)}>
+                                    Usuń
+                                </button>
+
+                            </td>
+                        </tr>
+                    );
+                })
             }
             </tbody>
         </table>

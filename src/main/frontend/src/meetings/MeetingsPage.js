@@ -6,18 +6,28 @@ export default function MeetingsPage({username}) {
     const [meetings, setMeetings] = useState([]);
     const [addingNewMeeting, setAddingNewMeeting] = useState(false);
 
+
+    async function fetchMeetings() {
+        const response = await fetch(`/api/meetings`);
+        if (response.ok) {
+            const data = await response.json();
+            setMeetings(data);
+        }
+    }
+
+
     async function handleNewMeeting(meeting) {
         const response = await fetch('/api/meetings', {
             method: 'POST',
             body: JSON.stringify(meeting),
             headers: {'Content-Type': 'application/json'}
         });
-        if (response.ok) {
-            const newMeeting = await response.json();
 
-            const nextMeetings = [...meetings, newMeeting];
-            setMeetings(nextMeetings);
+        if (response.ok) {
+            await fetchMeetings();   // 👈 kluczowe
             setAddingNewMeeting(false);
+        } else {
+            alert("Błąd tworzenia spotkania");
         }
     }
 
@@ -31,6 +41,7 @@ export default function MeetingsPage({username}) {
         );
 
         if (response.ok) {
+            await fetchMeetings();
             alert("Zapisano na spotkanie");
         } else {
             alert("Błąd zapisu");
@@ -39,15 +50,9 @@ export default function MeetingsPage({username}) {
 
 
     useEffect(() => {
-        const fetchMeetings = async () => {
-            const response = await fetch(`/api/meetings`);
-            if (response.ok) {
-                const meetings = await response.json();
-                setMeetings(meetings);
-            }
-        };
+
         fetchMeetings();
-    }, []);
+    }, [username]);
 
 
     async function handleDeleteMeeting(meeting) {
@@ -55,8 +60,8 @@ export default function MeetingsPage({username}) {
             method: 'DELETE',
         });
         if (response.ok) {
-            const nextMeetings = meetings.filter(m => m !== meeting);
-            setMeetings(nextMeetings);
+
+            await fetchMeetings();
         }
     }
 
@@ -71,6 +76,7 @@ export default function MeetingsPage({username}) {
 
         if (response.ok) {
             console.log("Wypisano ze spotkania");
+            await fetchMeetings();
         }
     }
 
